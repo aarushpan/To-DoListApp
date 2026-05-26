@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Todo List App</title>
+    <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
     <main>
@@ -12,11 +13,11 @@
         <p>Manage your tasks with this TodoList.</p>
       </header>
 
-      <section aria-labelledby="todo-entry-heading">
-        <h2 id="todo-entry-heading">Add a new task</h2>
-        <form>
-          <label for="new-task">Task</label>
-          <input type="text" id="new-task" name="new-task" placeholder="Enter a task" />
+      <section aria-labelledby="todoheading">
+        <h2 id="todoheading">Add a New Task</h2>
+        <form name="newtask">
+         
+          <input name="newtask" type="text" id="newtask" placeholder="Enter a task" />
           <button type="submit">Add Task</button>
         </form>
       </section>
