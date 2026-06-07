@@ -3,18 +3,19 @@ const STORAGE_KEY = "todoListApptasks";
 const elements = {
   form: document.querySelector('form[name="newtask"]'),
   input: document.getElementById('newtask'),
+  dateInput: document.getElementById('task-date'),
   list: document.getElementById('task-list'),
 };
 
 let tasks = [];
 
 function saveTasks() {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
+  localStorage.setItem(STORAGE_KEY,JSON.stringify(tasks));
 }
 
 function loadTasks() {
   const stored = localStorage.getItem(STORAGE_KEY);
-  tasks = stored ? JSON.parse(stored) : [];
+  tasks = stored ? JSON.parse(stored):[];
 }
 
 function createTaskItem(task, index) {
@@ -26,12 +27,18 @@ function createTaskItem(task, index) {
   const textSpan = document.createElement('span');
   textSpan.textContent = task.text;
 
+  const dateSpan = document.createElement('span');
+  if (task.date) {
+    dateSpan.className = 'task-date';
+    dateSpan.textContent = task.date;
+  }
+
   const actions = document.createElement('div');
   actions.className = 'task-actions';
 
   const completeButton = document.createElement('button');
   completeButton.type = 'button';
-  completeButton.textContent = task.completed ? 'Undo' : 'Complete';
+  completeButton.textContent = task.completed ?'Undo':'Complete';
   completeButton.addEventListener('click', () => {
     tasks[index].completed = !tasks[index].completed;
     saveTasks();
@@ -48,7 +55,7 @@ function createTaskItem(task, index) {
   });
 
   actions.append(completeButton, deleteButton);
-  li.append(textSpan, actions);
+  li.append(textSpan, dateSpan, actions);
   return li;
 }
 
@@ -72,8 +79,8 @@ function renderTasks() {
   });
 }
 
-function addTask(text) {
-  tasks.push({ text, completed: false });
+function addTask(text, date) {
+  tasks.push({text, date, completed: false});
   saveTasks();
   renderTasks();
 }
@@ -86,8 +93,9 @@ elements.form.addEventListener('submit', (event) => {
     return;
   }
 
-  addTask(trimmed);
+  addTask(trimmed, elements.dateInput.value);
   elements.input.value = '';
+  elements.dateInput.value = '';
   elements.input.focus();
 });
 

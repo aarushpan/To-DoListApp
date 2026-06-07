@@ -52,6 +52,7 @@ button:hover {
 }
 
 input[type="text"],
+input[type="date"],
 textarea {
     width: 100%;
     padding: 10px 12px;
@@ -61,6 +62,11 @@ textarea {
     box-sizing: border-box;
     outline: none;
     transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.task-date {
+    color: #6c757d;
+    font-size: 0.9em;
 }
 
 input[type="text"]:focus,
@@ -108,5 +114,5 @@ form {
 }
 
 .task-actions button:last-child {
-    background: #dc3545;
+    background: #ee1d32;
 }
