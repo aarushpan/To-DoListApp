@@ -88,14 +88,42 @@ form {
 
 #task-list li {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: space-between;
-    gap: 10px;
+    gap: 12px;
     padding: 12px 14px;
     border-bottom: 1px solid #e9ecef;
     border-radius: 6px;
     background: #fff;
     margin-bottom: 10px;
+}
+
+.task-content {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    flex: 1;
+}
+
+.task-text {
+    font-weight: 600;
+}
+
+.task-labels {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.task-label-chip {
+    display: inline-flex;
+    align-items: center;
+    border-radius: 999px;
+    background: #e8f5e9;
+    color: #1b5e20;
+    padding: 4px 8px;
+    font-size: 0.85em;
+    font-weight: 600;
 }
 
 #task-list li.done span {

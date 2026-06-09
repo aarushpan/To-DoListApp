@@ -4,18 +4,25 @@ const elements = {
   form: document.querySelector('form[name="newtask"]'),
   input: document.getElementById('newtask'),
   dateInput: document.getElementById('task-date'),
+  labelsInput: document.getElementById('task-labels'),
   list: document.getElementById('task-list'),
 };
 
 let tasks = [];
 
 function saveTasks() {
-  localStorage.setItem(STORAGE_KEY,JSON.stringify(tasks));
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
 }
 
 function loadTasks() {
-  const stored = localStorage.getItem(STORAGE_KEY);
-  tasks = stored ? JSON.parse(stored):[];
+  tasks = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]').map((task) => ({
+    ...task,
+    labels: task.labels || [],
+  }));
+}
+
+function normalizeLabels(value) {
+  return value.split(',').map((label) => label.trim().replace(/\s+/g, '')).filter(Boolean);
 }
 
 function createTaskItem(task, index) {
@@ -24,7 +31,11 @@ function createTaskItem(task, index) {
     li.classList.add('done');
   }
 
+  const content = document.createElement('div');
+  content.className = 'task-content';
+
   const textSpan = document.createElement('span');
+  textSpan.className = 'task-text';
   textSpan.textContent = task.text;
 
   const dateSpan = document.createElement('span');
@@ -33,12 +44,23 @@ function createTaskItem(task, index) {
     dateSpan.textContent = task.date;
   }
 
+  const labelsContainer = document.createElement('div');
+  labelsContainer.className = 'task-labels';
+  (task.labels || []).forEach((label) => {
+    const labelChip = document.createElement('span');
+    labelChip.className = 'task-label-chip';
+    labelChip.textContent = label;
+    labelsContainer.appendChild(labelChip);
+  });
+
+  content.append(textSpan, dateSpan, labelsContainer);
+
   const actions = document.createElement('div');
   actions.className = 'task-actions';
 
   const completeButton = document.createElement('button');
   completeButton.type = 'button';
-  completeButton.textContent = task.completed ?'Undo':'Complete';
+  completeButton.textContent = task.completed ? 'Undo' : 'Complete';
   completeButton.addEventListener('click', () => {
     tasks[index].completed = !tasks[index].completed;
     saveTasks();
@@ -55,7 +77,7 @@ function createTaskItem(task, index) {
   });
 
   actions.append(completeButton, deleteButton);
-  li.append(textSpan, dateSpan, actions);
+  li.append(content, actions);
   return li;
 }
 
@@ -79,8 +101,8 @@ function renderTasks() {
   });
 }
 
-function addTask(text, date) {
-  tasks.push({text, date, completed: false});
+function addTask(text, date, labels) {
+  tasks.push({ text, date, labels, completed: false });
   saveTasks();
   renderTasks();
 }
@@ -93,9 +115,12 @@ elements.form.addEventListener('submit', (event) => {
     return;
   }
 
-  addTask(trimmed, elements.dateInput.value);
+  const labels = normalizeLabels(elements.labelsInput.value);
+
+  addTask(trimmed, elements.dateInput.value, labels);
   elements.input.value = '';
   elements.dateInput.value = '';
+  elements.labelsInput.value = '';
   elements.input.focus();
 });
 
