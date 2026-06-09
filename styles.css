@@ -118,9 +118,9 @@ form {
 .task-label-chip {
     display: inline-flex;
     align-items: center;
-    border-radius: 999px;
+    border-radius: 787px;
     background: #e8f5e9;
-    color: #1b5e20;
+    color: #a0c2a2;
     padding: 4px 8px;
     font-size: 0.85em;
     font-weight: 600;

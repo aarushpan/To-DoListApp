@@ -16,7 +16,7 @@ function saveTasks() {
 
 function loadTasks() {
   tasks = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]').map((task) => ({
-    ...task,
+  ...task,
     labels: task.labels || [],
   }));
 }
