@@ -21,7 +21,7 @@ main {
 
 h1 {
     text-align: center;
-    color: #226b0a;
+    color: #256b0e;
     margin: 0 0 1rem;
     font-size: 2em;
     font-weight: 700;
@@ -137,10 +137,10 @@ form {
 }
 
 .task-actions button {
-    background: #007bff;
+    background: #0572e7;
     padding: 8px 12px;
 }
 
 .task-actions button:last-child {
-    background: #ee1d32;
+    background: #ee283c;
 }

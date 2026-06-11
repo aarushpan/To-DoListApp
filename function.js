@@ -10,19 +10,34 @@ const elements = {
 
 let tasks = [];
 
+function sanitizeText(value) {
+  return String(value || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;')
+    .trim();
+}
+
 function saveTasks() {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
 }
 
 function loadTasks() {
   tasks = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]').map((task) => ({
-  ...task,
-    labels: task.labels || [],
+    ...task,
+    text: sanitizeText(task.text),
+    date: sanitizeText(task.date || ''),
+    labels: (task.labels || []).map((label) => sanitizeText(label).replace(/\s+/g, '')),
   }));
 }
 
 function normalizeLabels(value) {
-  return value.split(',').map((label) => label.trim().replace(/\s+/g, '')).filter(Boolean);
+  return value
+    .split(',')
+    .map((label) => sanitizeText(label).replace(/\s+/g, ''))
+    .filter(Boolean);
 }
 
 function createTaskItem(task, index) {
@@ -102,7 +117,15 @@ function renderTasks() {
 }
 
 function addTask(text, date, labels) {
-  tasks.push({ text, date, labels, completed: false });
+  const safeText = sanitizeText(text);
+  const safeDate = sanitizeText(date);
+  const safeLabels = labels.map((label) => sanitizeText(label).replace(/\s+/g, ''));
+
+  if (!safeText) {
+    return;
+  }
+
+  tasks.push({ text: safeText, date: safeDate, labels: safeLabels, completed: false });
   saveTasks();
   renderTasks();
 }
